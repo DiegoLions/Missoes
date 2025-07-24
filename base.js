@@ -57,23 +57,29 @@ function adicionarMissaoAoGerenciador() {
     rl.question('Digite o nome da missão: ', (nome) => {
         rl.question('Digite o destino da missão, (ex: Marte, Júpiter, Saturno, etc.): ', (destino) => {
             rl.question('Digite a prioridade da missão de 1 a 5: ', (prioridade) => {
-                if (prioridade <= 0 || isNaN(prioridade)) {
+                if (prioridade <= 0 || prioridade >= 6 || isNaN(prioridade)) {
                     console.log('Prioridade inválida!!');
                     return adicionarMissaoAoGerenciador();
                 }
+            } else {
+                console.log('');
+                rl.question('', AdicionarTripulantes);
+                                                                                                                                               
 
-                
-                    function adicionartripulantes() {
+                    function AdicionarTripulantes() {
                         let tripulantes = []; 
                         rl.question('Digite o nome do tripulante:', (tripulante) => {
                             tripulantes.push(tripulante)
                             console.log('Tripulante adicionado com sucesso!!');
-                            console.log('Deseja adicionar outro tripulante?: (s/n)');
+                            console.log('Deseja adicionar outro tripulante? (s/n)');
                             rl.question('', (resposta) => {
                                 resposta.toLowerCase() === 's'
-                                    ? adicionarTripulante()
+                                    ? AdicionarTripulantes()
                                     : menu();
                             })
+                            })
+                        }
+
 
                     const missao = {
                         nome,
@@ -91,11 +97,11 @@ function adicionarMissaoAoGerenciador() {
                             : menu();
                     });
                 });
-            }
+            })
         });
-        });
-    });
-}
+        };
+    
+
 
 
 function ListarMissoesCadastradas() {
@@ -116,7 +122,7 @@ function ListarMissoesCadastradas() {
 
 }
 
-function editarMissao() {
+function EditarMissao() {
     if (missao.length === 0) { 
         console.log('Nenhuma missão para editar.');
         console.log('\nPresione Enter para voltar ao menu...');
@@ -159,7 +165,7 @@ function editarMissao() {
 }
 
 
-function missoesConcluidas() {
+function MarcarMissaoComoConcluida() {
     if (missoes.length === 0) {
       console.log('Nenhuma missão foi adicionada.');
       console.log('\nPressione Enter para voltar ao menu.');
@@ -191,7 +197,7 @@ function missoesConcluidas() {
     });
 }
 
-function filtroPrioridade (){
+function FiltrarPorPriodade(){
     if (missoes.length === 0) {
         console.log('Nenhuma missão registrada.');
         console.log('\nPressione Enter para retornar ao menu...');
@@ -223,7 +229,7 @@ function filtroPrioridade (){
     });
 }
 
-function verificarDestino (){
+function RankingDosDestinos(){
     if (missoes.length === 0) {
         console.log('Nenhuma missão registrada.');
         console.log('\nPressione Enter para retornar ao menu...');
@@ -257,7 +263,7 @@ function verificarDestino (){
 
 const prompt = require("prompt-sync")();
 
-function listarPorTripulante(missoes) {
+function ListarPorTripulante() {
   const nomeTripulante = prompt("Digite o nome do tripulante: ").toLowerCase();
 
   const missoesDoTripulante = missoes.filter(missao =>
