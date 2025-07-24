@@ -115,3 +115,78 @@ function ListarMissoesCadastradas() {
 
 
 }
+
+function editarMissao() {
+    if (missao.length === 0) { 
+        console.log('Nenhuma missão para editar.');
+        console.log('\nPresione Enter para voltar ao menu...');
+        rl.question('', () => menu());
+    } else {
+        console.log('\n=== MISSÕES CRIADAS ===');
+        missoes.forEach((missao, index) => { 
+            console.log(
+                `${index + 1}. Missão: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes}`
+            );
+        });
+
+        rl.question('\nDigite o número da missão que você deseja editar: ', (num) => {
+            const index = parseInt(num, 10) - 1;
+            if (index < 0 || index >= missoes.length) { 
+                console.log('Número inválido');
+                console.log('\nPresione Enter para voltar ao menu...');
+                rl.question('', () => menu());
+            } else { 
+                rl.question('Digite o nome da missão: ', (nome) => {
+                    rl.question('Escolha o destino da sua missão: ', (destino) => {
+                        rl.question('Prioridade da missão (1-5): ', (prioridade) => {
+                            rl.question('Adicione os tripulantes para essa missão: ', (tripulantes)  => {
+                                missoes[index] = { 
+                                    nome,
+                                    destino,
+                                    prioridade,
+                                    tripulantes,
+                                };
+                                console.log('Missão editada com sucesso!');
+                                console.log('\nPressione Enter para voltar ao menu...');
+                                rl.question('', () => menu()); 
+                            });
+                        });
+                    });
+                });
+            }
+        });
+    }
+}
+
+
+function missoesConcluidas() {
+    if (missoes.length === 0) {
+      console.log('Nenhuma missão foi adicionada.');
+      console.log('\nPressione Enter para voltar ao menu.');
+      return rl.question('', () => menu());
+    }
+
+    console.log('\n=== Missões ===');
+    missoes.forEach((missao, index) => {
+      const status = missao.concluida ? 'Concluído' : 'Pendente';
+      console.log(
+        `${index + 1}. Missão: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes} | Status: ${status}`
+    );
+    });
+
+    rl.question('\nDigite o número da missão que deseja marcar como concluída: ', (num) => {
+      const index = parseInt(num, 10) - 1;
+
+      if (index < 0 || index >= missoes.length) {
+        console.log('Essa missão não existe!');
+        console.log('\nPressione Enter para voltar ao menu...');
+        return rl.question('', () => menu());
+      } else {
+        missoes[index].concluido = true;
+
+        console.log('Status editado com sucesso!');
+        console.log('\nPressione Enter para voltar ao menu...');
+        rl.question('', () => menu());
+      }
+    });
+}
