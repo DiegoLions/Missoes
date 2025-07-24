@@ -190,3 +190,67 @@ function missoesConcluidas() {
       }
     });
 }
+
+function filtroPrioridade (){
+    if (missoes.length === 0) {
+        console.log('Nenhuma missão registrada.');
+        console.log('\nPressione Enter para retornar ao menu...');
+        return rl.question('', menu);
+    }
+
+    rl.question('Por qual nivel de prioridade você deseja filtrar? ', (filtroPrioridade) => {
+        let missoesFiltradas = []; 
+
+        for (let i = 0; i < missoes.length; i++) {
+            const missao = missoes[i]; 
+            if (missao.prioridade.includes(filtro)) {
+                missoesFiltradas.push(missao); 
+            }
+        }
+
+        if (missoesFiltradas.length === 0) {
+            console.log(`Não existe nenhuma missao no  nivel "${filtroPrioridade}"`);
+            console.log('\nPressione Enter para retornar ao menu...');
+            rl.question('', menu);
+        } else {
+            console.log(`\n=== MISSÕES DE NÍVEL "${filtro}" ===`);
+            missoesFiltradas.forEach((missao, index) => {
+                console.log(`${index + 1}. Nome: ${nome} | Destino: ${destino} | Tripulantes: ${tripulantes}`);
+            });
+            console.log('\nPressione Enter para retornar ao menu...');
+            rl.question('', menu);
+        }
+    });
+}
+
+function verificarDestino (){
+    if (missoes.length === 0) {
+        console.log('Nenhuma missão registrada.');
+        console.log('\nPressione Enter para retornar ao menu...');
+        return rl.question('', menu);
+    }
+
+    rl.question('Deseja verificar quantas missões existem em qual destino? ', (filtrarDestino) => {
+
+        let contador = 0
+
+        for (let i = 0; i < missoes.length; i++) {
+            const missao = missoes[i]; 
+            if (missao.destino.includes(filtrarDestino)) {
+                contador++
+            }
+        }
+
+        if (contador === 0) {
+            console.log(`Não existe nenhuma missão no  nivel "${filtrarDestino}"`);
+            console.log('\nPressione Enter para retornar ao menu...');
+            rl.question('', menu);
+        } else {
+            console.log(`\n=== MISSÕES EM ${filtrarDestino.toUpperCase} ===`);
+            console.log(`\nExistem ${contador} missões neste destino.`);
+
+            console.log('\nPressione Enter para retornar ao menu...');
+            rl.question('', menu);
+        }
+    });
+}
