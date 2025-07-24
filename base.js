@@ -254,3 +254,29 @@ function verificarDestino (){
         }
     });
 }
+
+const prompt = require("prompt-sync")();
+
+function listarPorTripulante(missoes) {
+  const nomeTripulante = prompt("Digite o nome do tripulante: ").toLowerCase();
+
+  const missoesDoTripulante = missoes.filter(missao =>
+    missao.tripulantes.some(tripulante => tripulante.toLowerCase() === nomeTripulante)
+  );
+
+  if (missoesDoTripulante.length === 0) {
+    console.log(`Nenhuma missão encontrada para o tripulante "${nomeTripulante}".`);
+  } else {
+    console.log(`Missões com o tripulante "${nomeTripulante}":`);
+    missoesDoTripulante.forEach((missao, index) => {
+      console.log(`${index + 1}. ${missao.nome} - Destino: ${missao.destino}`);
+    });
+  }
+}
+
+function sair() {
+    console.log("Programa finalizado. Até a próxima!");
+    process.exit();
+  }
+
+menu();
