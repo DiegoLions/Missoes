@@ -127,11 +127,11 @@ function ListarMissoesCadastradas() {
 
 function EditarMissao() {
     if (missoes.length === 0) { 
-        console.log('Nenhuma missão para editar.');
+        console.log('Nenhuma missão cadastrada no gerenciador.');
         console.log('\nPresione Enter para voltar ao menu...');
         rl.question('', () => menu());
     } else {
-        console.log('\n=== MISSÕES CRIADAS ===');
+        console.log('\n=== MISSÕES REGISTRADAS ===');
         missoes.forEach((missao, index) => { 
             console.log(
                 `${index + 1}. Missão: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes}`
@@ -142,7 +142,7 @@ function EditarMissao() {
             const index = parseInt(num, 10) - 1;
             if (index < 0 || index >= missoes.length) { 
                 console.log('Número inválido');
-                console.log('\nPresione Enter para voltar ao menu...');
+                console.log('\nPresione Enter para voltar ao menu');
                 rl.question('', () => menu());
             } else { 
                 rl.question('Digite o nome da missão: ', (nome) => {
@@ -156,8 +156,29 @@ function EditarMissao() {
                                 EditarMissao(); 
                             } else {
                                 prioridadeAtual = prioridadeParsed;
+
                                 tripulantesAtuais = []
-                                perguntarTripulantes(); 
+                            
+                                function editarTripulantes() {
+                                    rl.question("Adicionar um tripulante: ", (tripulante) => {
+                                        tripulantesAtuais.push(tripulante)
+                                        console.log(tripulantesAtuais)
+                                        rl.question("Deseja adicionar outro tripulante? (s/n): ", (res) => {
+                                            if (res.toLowerCase() === 's') {
+                                                editarTripulantes();
+                                            } else {
+                                                missoes[index].nome = nomeAtual;
+                                                missoes[index].destino = destinoAtual;
+                                                missoes[index].prioridade = prioridadeAtual;
+                                                missoes[index].tripulantes = [tripulantesAtuais]
+
+                                                console.log('Missão editada com sucesso!');
+                                                menu()
+                                            }
+                                        });
+                                    });
+                                }
+                                perguntarTripulantesParaEdicaoInterna(); // Start collecting tripulantes for editing
                             }
                         });
                     });
@@ -166,7 +187,6 @@ function EditarMissao() {
         });
     }
 }
-
 
 function MarcarMissaoComoConcluida() {
     if (missoes.length === 0) {
