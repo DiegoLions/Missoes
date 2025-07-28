@@ -5,7 +5,12 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-let missoes = []; 
+let missoes = [];
+let nomeAtual
+let destinoAtual
+let prioridadeAtual
+let tripulantesAtuais = []
+
 
 function menu() {
     console.log('\n<<<<<<GERENCIADOR DE MISSÕES ESPACIAIS>>>>>');
@@ -54,39 +59,47 @@ function menu() {
 }
 
 function adicionarMissaoAoGerenciador() {
-    
-    let tripulantesMissao = [];
+    nomeAtual = '';
+    destinoAtual = '';
+    prioridadeAtual = 0;
+    tripulantesAtuais = [];
 
     rl.question('Digite o nome da missão: ', (nome) => {
-        nomeMissao = nome;
+        nomeAtual = nome
         rl.question('Digite o destino da missão (ex: Marte, Júpiter, Saturno, etc.): ', (destino) => {
-            destinoMissao = destino;
+            destinoAtual = destino
             rl.question('Digite a prioridade da missão de 1 a 5: ', (prioridade) => {
                 const prioridadeParsed = parseInt(prioridade);
                 if (isNaN(prioridadeParsed) || prioridadeParsed < 1 || prioridadeParsed > 5) {
                     console.log('Prioridade inválida! Por favor, digite um número entre 1 e 5.');
-                    adicionarMissaoAoGerenciador();
+                    adicionarMissaoAoGerenciador(); 
                 } else {
-                    prioridadeMissao = prioridadeParsed;
-                    perguntarTripulantes();
+                    prioridadeAtual = prioridadeParsed; 
+                    perguntarTripulantes(); 
                 }
             })
         })
-        })
-    }
+    })
+}
 
-    let tripulantes = []
     function perguntarTripulantes() {
             rl.question("Adicionar um tripulante: ", (tripulante) =>{
-                tripulantes.push(tripulante)
-                console.log(tripulantes)
+                tripulantesAtuais.push(tripulante)
+                console.log(tripulantesAtuais)
                 rl.question("deseja adicionar outro tripulante? ", (res) => {
-                if(res =='s'){
+                if(res.toLowerCase() =='s'){
                     perguntarTripulantes()
                 } else{
-                    controle = false
+                    const missao = {
+                        nome: nomeAtual,
+                        destino: destinoAtual,
+                        prioridade: prioridadeAtual,
+                        tripulantes: tripulantesAtuais,
+                        concluida: false,
+                    }
+                    missoes.push(missao)
+                    console.log('Missão adicionada com sucesso!');
                     menu()
-                    
                 }
                 })
                 } 
@@ -102,7 +115,7 @@ function ListarMissoesCadastradas() {
 
     console.log('\n=== MISSOES CADASTRADAS ===');
     missoes.forEach((missao, index) => {
-        console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulante}`);
+        console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes}`);
     });
 
     console.log('\nPressione Enter para retornar ao menu...');
@@ -241,9 +254,9 @@ function RankingDosDestinos() {
         const destino = missao.destino;
 
         if (destinosContagem[destino]) {
-            destinosContagem[destino]++;
+            destinosContagem[destino]++
         } else {
-            destinosContagem[destino] = 1;
+            destinosContagem[destino] = 1
         }
     }
 
@@ -259,21 +272,40 @@ function RankingDosDestinos() {
 
 
 
-function ListarPorTripulante(missoes) {
-  const nomeTripulante = prompt("Digite o nome do tripulante: ").toLowerCase();
+function ListarPorTripulante() {
+    if (missoes.length === 0) {
+        console.log('Nenhuma missão registrada.');
+        console.log('\nPressione Enter para retornar ao menu...');
+        return rl.question('', menu);
+    }
 
-  const missoesDoTripulante = missoes.filter(missao =>
-    missao.tripulantes.some(tripulante => tripulante.toLowerCase() === nomeTripulante)
-  );
+    rl.question('Deseja listar as missões de qual tripulante? ', (listarTripulantes) => {
+        const termoLower = listarTripulantes.toLowerCase(); 
+        let missoesDoTripulante = [];
 
-  if (missoesDoTripulante.length === 0) {
-    console.log(`Nenhuma missão encontrada para o tripulante "${nomeTripulante}".`);
-  } else {
-    console.log(`Missões com o tripulante "${nomeTripulante}":`);
-    missoesDoTripulante.forEach((missao, index) => {
-      console.log(`${index + 1}. ${missao.nome} - Destino: ${missao.destino}`);
+        for (let i = 0; i < missoes.length; i++) {
+            const missao = missoes[i];
+            const tripulanteEncontrado = missao.tripulantes.some(t => t.toLowerCase().includes(termoLower));
+
+            if (tripulanteEncontrado) {
+                missoesDoTripulante.push(missao);
+            }
+        }
+
+        if (missoesDoTripulante.length === 0) {
+            console.log(`O tripulante "${listarTripulantes}" não está em nenhuma missão.`); 
+            console.log('\nPressione Enter para retornar ao menu...');
+            rl.question('', menu);
+        } else {
+            console.log(`\n=== MISSÕES DO TRIPULANTE "${listarTripulantes.toUpperCase()}" ===`);
+            missoesDoTripulante.forEach((missao, index) => {
+                const status = missao.concluida ? 'Concluída' : 'Pendente';
+                console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes.join(', ')} | Status: ${status}`); // Added .join(', ')
+            });
+            console.log('\nPressione Enter para retornar ao menu...');
+            rl.question('', menu);
+        }
     });
-  }
 }
 
 menu();
