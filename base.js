@@ -115,10 +115,11 @@ function ListarMissoesCadastradas() {
 
     console.log('\n=== MISSOES CADASTRADAS ===');
     missoes.forEach((missao, index) => {
-        console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes}`);
+        console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes} | Status: ${missao.concluida}`)
     });
 
     console.log('\nPressione Enter para retornar ao menu...');
+    
     rl.question('', menu);
 
 
@@ -145,19 +146,19 @@ function EditarMissao() {
                 rl.question('', () => menu());
             } else { 
                 rl.question('Digite o nome da missão: ', (nome) => {
-                    rl.question('Escolha o destino da sua missão: ', (destino) => {
-                        rl.question('Prioridade da missão (1-5): ', (prioridade) => {
-                            rl.question('Adicione os tripulantes para essa missão: ', (tripulantes)  => {
-                                missoes[index] = { 
-                                    nome,
-                                    destino,
-                                    prioridade,
-                                    tripulantes,
-                                };
-                                console.log('Missão editada com sucesso!');
-                                console.log('\nPressione Enter para voltar ao menu...');
-                                rl.question('', () => menu()); 
-                            });
+                    nomeAtual = nome
+                    rl.question('Digite o destino da missão (ex: Marte, Júpiter, Saturno, etc.): ', (destino) => {
+                        destinoAtual = destino
+                        rl.question('Digite a prioridade da missão de 1 a 5: ', (prioridade) => {
+                            const prioridadeParsed = parseInt(prioridade);
+                            if (isNaN(prioridadeParsed) || prioridadeParsed < 1 || prioridadeParsed > 5) {
+                                console.log('Prioridade inválida! Por favor, digite um número entre 1 e 5.');
+                                EditarMissao(); 
+                            } else {
+                                prioridadeAtual = prioridadeParsed;
+                                tripulantesAtuais = []
+                                perguntarTripulantes(); 
+                            }
                         });
                     });
                 });
@@ -190,7 +191,7 @@ function MarcarMissaoComoConcluida() {
         console.log('\nPressione Enter para voltar ao menu...');
         return rl.question('', () => menu());
       } else {
-        missoes[index].concluido = true;
+        missoes[index].concluida = true;
 
         console.log('Status editado com sucesso!');
         console.log('\nPressione Enter para voltar ao menu...');
