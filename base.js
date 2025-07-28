@@ -8,7 +8,7 @@ const rl = readline.createInterface({
 let missoes = []; 
 
 function menu() {
-    console.log('<<<<<<GERENCIADOR DE MISSÕES ESPACIAIS>>>>>');
+    console.log('\n<<<<<<GERENCIADOR DE MISSÕES ESPACIAIS>>>>>');
     console.log('1. Adicionar missão ao gerenciador');
     console.log('2. Listar missões cadastradas');
     console.log('3. Editar informações das missões cadastradas');
@@ -54,7 +54,7 @@ function menu() {
 }
 
 function adicionarMissaoAoGerenciador() {
-    let nomeMissao, destinoMissao, prioridadeMissao;
+    
     let tripulantesMissao = [];
 
     rl.question('Digite o nome da missão: ', (nome) => {
@@ -75,46 +75,27 @@ function adicionarMissaoAoGerenciador() {
         })
     }
 
+    let tripulantes = []
     function perguntarTripulantes() {
-        rl.question('Digite o nome do tripulante (ou pressione Enter para finalizar): ', (tripulanteNome) => {
-            if (tripulanteNome.trim() === '') {
-                finalizarAdicaoMissao();
-            } else {
-                tripulantesMissao.push(tripulanteNome.trim());
-                console.log('Tripulante adicionado com sucesso!');
-                console.log('Deseja adicionar outro tripulante? (s/n): ');
-                rl.question('', (resposta) => {
-                    if (resposta.toLowerCase() === 's') {
-                        perguntarTripulantes(); 
-                    } else {
-                        const missao = {
-                            nome: nomeMissao,
-                            destino: destinoMissao,
-                            prioridade: prioridadeMissao,
-                            tripulantes: tripulantesMissao, 
-                            concluida: false 
-                        };
-                        missoes.push(missao);
-                        console.log('Sua missão foi adicionada com sucesso!');
-                        console.log('Deseja adicionar outra missão? (s/n): ');
-                
-                        rl.question('', (resposta) => {
-                            if (resposta.toLowerCase() === 's') {
-                                adicionarMissaoAoGerenciador(); 
-                            } else {
-                                menu();
-                            }
-                        });
-                    }
+            rl.question("Adicionar um tripulante: ", (tripulante) =>{
+                tripulantes.push(tripulante)
+                console.log(tripulantes)
+                rl.question("deseja adicionar outro tripulante? ", (res) => {
+                if(res =='s'){
+                    perguntarTripulantes()
+                } else{
+                    controle = false
+                    menu()
+                    
+                }
                 })
-                
-                    }
-                });
-            }
-
+                } 
+                )}
+            
+    
 function ListarMissoesCadastradas() {
     if (missoes.length === 0) { 
-        console.log('Nenhum missão cadastrada no gerenciador.');
+        console.log('Nenhuma missão cadastrada no gerenciador.');
         console.log('\nPressione Enter para retornar ao menu...');
         return rl.question('', menu);
     }
@@ -294,10 +275,5 @@ function ListarPorTripulante(missoes) {
     });
   }
 }
-
-function Sair() {
-    console.log("Programa finalizado. Até a próxima!");
-    process.exit();
-  }
 
 menu();
