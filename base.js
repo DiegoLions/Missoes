@@ -86,7 +86,7 @@ function adicionarMissaoAoGerenciador() {
             rl.question("Adicionar um tripulante: ", (tripulante) =>{
                 tripulantesAtuais.push(tripulante)
                 console.log(tripulantesAtuais)
-                rl.question("deseja adicionar outro tripulante? ", (res) => {
+                rl.question("deseja adicionar outro tripulante? (s/n)", (res) => {
                 if(res.toLowerCase() =='s'){
                     perguntarTripulantes()
                 } else{
@@ -115,11 +115,10 @@ function ListarMissoesCadastradas() {
 
     console.log('\n=== MISSOES CADASTRADAS ===');
     missoes.forEach((missao, index) => {
-        console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes}`)
+            console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes}`)
     });
 
     console.log('\nPressione Enter para retornar ao menu...');
-
     rl.question('', menu);
 
 
@@ -178,7 +177,7 @@ function EditarMissao() {
                                         });
                                     });
                                 }
-                                perguntarTripulantesParaEdicaoInterna(); // Start collecting tripulantes for editing
+                                editarTripulantes()
                             }
                         });
                     });
