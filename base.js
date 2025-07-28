@@ -115,11 +115,11 @@ function ListarMissoesCadastradas() {
 
     console.log('\n=== MISSOES CADASTRADAS ===');
     missoes.forEach((missao, index) => {
-        console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes} | Status: ${missao.concluida}`)
+        console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes}`)
     });
 
     console.log('\nPressione Enter para retornar ao menu...');
-    
+
     rl.question('', menu);
 
 
