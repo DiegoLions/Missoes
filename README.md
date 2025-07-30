@@ -37,3 +37,8 @@ function RankingDosDestinos() {
     console.log('\nPressione Enter para retornar ao menu...');
     rl.question('', menu);
 }
+
+
+
+
+const status = missao.concluida ? 'Concluída' : 'Pendente';
