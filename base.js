@@ -115,7 +115,8 @@ function ListarMissoesCadastradas() {
 
     console.log('\n=== MISSOES CADASTRADAS ===');
     missoes.forEach((missao, index) => {
-            console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes}`)
+            const status = missao.concluida ? 'Concluída' : 'Pendente';
+            console.log(`${index + 1}. Nome: ${missao.nome} | Destino: ${missao.destino} | Prioridade: ${missao.prioridade} | Tripulantes: ${missao.tripulantes} | Status: ${status}`) 
     });
 
     console.log('\nPressione Enter para retornar ao menu...');
@@ -283,7 +284,12 @@ function RankingDosDestinos() {
     console.log('\n=== MISSÕES POR DESTINO ===');
 
     for (const destino in destinosContagem) {
-        console.log(`- ${destino}: ${destinosContagem[destino]} missões`);
+        console.log( destinosContagem[destino])
+        if ( destinosContagem[destino] == 1) {
+            console.log(`- ${destino}: ${destinosContagem[destino]} missão`)
+        }else {
+            console.log(`- ${destino}: ${destinosContagem[destino]} missões`);
+        }
     }
 
     console.log('\nPressione Enter para retornar ao menu...');
